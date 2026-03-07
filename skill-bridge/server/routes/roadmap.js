@@ -11,13 +11,17 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'missingSkills must be an array' })
   }
 
-  try {
-    const roadmap = await aiService.generateRoadmap(missingSkills, timeframe)
-    return res.json({ roadmap, mode: 'ai' })
-  } catch {
-    const roadmap = fallback.generateRoadmap(missingSkills)
-    return res.json({ roadmap, mode: 'fallback' })
+  if (req.query.forceMode !== 'fallback') {
+    try {
+      const roadmap = await aiService.generateRoadmap(missingSkills, timeframe)
+      return res.json({ roadmap, mode: 'ai' })
+    } catch {
+      // fall through to fallback
+    }
   }
+
+  const roadmap = fallback.generateRoadmap(missingSkills)
+  return res.json({ roadmap, mode: 'fallback' })
 })
 
 export default router

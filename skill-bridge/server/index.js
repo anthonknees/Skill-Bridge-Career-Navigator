@@ -3,6 +3,7 @@ import express from 'express'
 import jobsRouter from './routes/jobs.js'
 import analyzeRouter from './routes/analyze.js'
 import roadmapRouter from './routes/roadmap.js'
+import samplesRouter from './routes/samples.js'
 import { generalLimiter, aiLimiter } from './middleware/rateLimiter.js'
 import { sanitizeResumeInput } from './middleware/validation.js'
 
@@ -17,6 +18,7 @@ app.get('/api/health', (req, res) => {
 })
 
 app.use('/api/jobs', jobsRouter)
+app.use('/api/samples', samplesRouter)
 app.use('/api/analyze-resume', aiLimiter, sanitizeResumeInput, analyzeRouter)
 app.use('/api/generate-roadmap', aiLimiter, roadmapRouter)
 
