@@ -39,4 +39,13 @@ describe('POST /api/analyze-resume', () => {
     expect(res.status).toBe(400)
     expect(res.body).toHaveProperty('error')
   })
+
+  it('returns 413 when resumeText exceeds 10,000 characters', async () => {
+    const res = await request(app)
+      .post('/api/analyze-resume')
+      .send({ resumeText: 'a'.repeat(10001), targetRole: 'jd-001' })
+
+    expect(res.status).toBe(413)
+    expect(res.body).toHaveProperty('error')
+  })
 })
