@@ -1,0 +1,203 @@
+[
+  {
+    "skill": "AWS",
+    "priority": 1,
+    "courses": [
+      { "title": "AWS Cloud Practitioner Essentials", "provider": "AWS Training", "url": "#", "hours": 6, "free": true },
+      { "title": "AWS Certified Solutions Architect – Associate", "provider": "Udemy", "url": "#", "hours": 40, "free": false },
+      { "title": "AWS Fundamentals Specialization", "provider": "Coursera", "url": "#", "hours": 30, "free": false }
+    ]
+  },
+  {
+    "skill": "Docker",
+    "priority": 1,
+    "courses": [
+      { "title": "Docker for Beginners: From Zero to Hero", "provider": "Udemy", "url": "#", "hours": 10, "free": false },
+      { "title": "Docker Getting Started Tutorial", "provider": "Docker Docs", "url": "#", "hours": 3, "free": true }
+    ]
+  },
+  {
+    "skill": "Kubernetes",
+    "priority": 2,
+    "courses": [
+      { "title": "Kubernetes for the Absolute Beginners", "provider": "Udemy", "url": "#", "hours": 8, "free": false },
+      { "title": "Introduction to Kubernetes", "provider": "edX / Linux Foundation", "url": "#", "hours": 14, "free": true }
+    ]
+  },
+  {
+    "skill": "Terraform",
+    "priority": 2,
+    "courses": [
+      { "title": "HashiCorp Terraform Associate Certification Prep", "provider": "Udemy", "url": "#", "hours": 12, "free": false },
+      { "title": "Get Started with Terraform", "provider": "HashiCorp Learn", "url": "#", "hours": 4, "free": true }
+    ]
+  },
+  {
+    "skill": "CI/CD",
+    "priority": 2,
+    "courses": [
+      { "title": "GitHub Actions - The Complete Guide", "provider": "Udemy", "url": "#", "hours": 10, "free": false },
+      { "title": "GitLab CI: Pipelines, CI/CD and DevOps for Beginners", "provider": "Udemy", "url": "#", "hours": 12, "free": false }
+    ]
+  },
+  {
+    "skill": "Python",
+    "priority": 1,
+    "courses": [
+      { "title": "Python for Everybody Specialization", "provider": "Coursera", "url": "#", "hours": 32, "free": false },
+      { "title": "Automate the Boring Stuff with Python", "provider": "automatetheboringstuff.com", "url": "#", "hours": 20, "free": true }
+    ]
+  },
+  {
+    "skill": "Linux",
+    "priority": 1,
+    "courses": [
+      { "title": "Linux Command Line Basics", "provider": "Udacity", "url": "#", "hours": 6, "free": true },
+      { "title": "The Linux Command Line", "provider": "No Starch Press", "url": "#", "hours": 12, "free": true }
+    ]
+  },
+  {
+    "skill": "Networking",
+    "priority": 1,
+    "courses": [
+      { "title": "The Bits and Bytes of Computer Networking", "provider": "Coursera / Google", "url": "#", "hours": 24, "free": false },
+      { "title": "CompTIA Network+ Study Course", "provider": "Professor Messer", "url": "#", "hours": 20, "free": true }
+    ]
+  },
+  {
+    "skill": "React",
+    "priority": 1,
+    "courses": [
+      { "title": "React - The Complete Guide", "provider": "Udemy", "url": "#", "hours": 48, "free": false },
+      { "title": "Official React Documentation Tutorial", "provider": "React Docs", "url": "#", "hours": 5, "free": true }
+    ]
+  },
+  {
+    "skill": "TypeScript",
+    "priority": 2,
+    "courses": [
+      { "title": "Understanding TypeScript", "provider": "Udemy", "url": "#", "hours": 16, "free": false },
+      { "title": "TypeScript Handbook", "provider": "TypeScript Docs", "url": "#", "hours": 6, "free": true }
+    ]
+  },
+  {
+    "skill": "Node.js",
+    "priority": 1,
+    "courses": [
+      { "title": "Node.js - The Complete Guide", "provider": "Udemy", "url": "#", "hours": 40, "free": false },
+      { "title": "Node.js Getting Started", "provider": "nodejs.org", "url": "#", "hours": 4, "free": true }
+    ]
+  },
+  {
+    "skill": "SQL",
+    "priority": 1,
+    "courses": [
+      { "title": "SQL for Data Science", "provider": "Coursera / UC Davis", "url": "#", "hours": 16, "free": false },
+      { "title": "SQLZoo Interactive Tutorials", "provider": "SQLZoo", "url": "#", "hours": 8, "free": true }
+    ]
+  },
+  {
+    "skill": "PostgreSQL",
+    "priority": 2,
+    "courses": [
+      { "title": "The Complete Python and PostgreSQL Developer Course", "provider": "Udemy", "url": "#", "hours": 28, "free": false },
+      { "title": "PostgreSQL Tutorial", "provider": "postgresqltutorial.com", "url": "#", "hours": 6, "free": true }
+    ]
+  },
+  {
+    "skill": "Machine Learning",
+    "priority": 2,
+    "courses": [
+      { "title": "Machine Learning Specialization", "provider": "Coursera / DeepLearning.AI", "url": "#", "hours": 90, "free": false },
+      { "title": "Introduction to Machine Learning", "provider": "fast.ai", "url": "#", "hours": 30, "free": true }
+    ]
+  },
+  {
+    "skill": "Apache Spark",
+    "priority": 3,
+    "courses": [
+      { "title": "Apache Spark and Scala Certification Training", "provider": "Udemy", "url": "#", "hours": 24, "free": false },
+      { "title": "Spark by Examples", "provider": "sparkbyexamples.com", "url": "#", "hours": 8, "free": true }
+    ]
+  },
+  {
+    "skill": "Airflow",
+    "priority": 3,
+    "courses": [
+      { "title": "The Complete Hands-On Introduction to Apache Airflow", "provider": "Udemy", "url": "#", "hours": 8, "free": false },
+      { "title": "Apache Airflow Quickstart", "provider": "Apache Airflow Docs", "url": "#", "hours": 2, "free": true }
+    ]
+  },
+  {
+    "skill": "GCP",
+    "priority": 2,
+    "courses": [
+      { "title": "Google Cloud Fundamentals: Core Infrastructure", "provider": "Coursera / Google Cloud", "url": "#", "hours": 8, "free": false },
+      { "title": "Google Cloud Skills Boost", "provider": "Google Cloud", "url": "#", "hours": 10, "free": true }
+    ]
+  },
+  {
+    "skill": "Azure",
+    "priority": 2,
+    "courses": [
+      { "title": "AZ-900: Microsoft Azure Fundamentals", "provider": "Microsoft Learn", "url": "#", "hours": 8, "free": true },
+      { "title": "AZ-104: Microsoft Azure Administrator", "provider": "Udemy", "url": "#", "hours": 22, "free": false }
+    ]
+  },
+  {
+    "skill": "Network Security",
+    "priority": 2,
+    "courses": [
+      { "title": "CompTIA Security+ (SY0-701) Complete Course", "provider": "Professor Messer", "url": "#", "hours": 18, "free": true },
+      { "title": "Cybersecurity Fundamentals", "provider": "IBM / Coursera", "url": "#", "hours": 20, "free": false }
+    ]
+  },
+  {
+    "skill": "Penetration Testing",
+    "priority": 3,
+    "courses": [
+      { "title": "Practical Ethical Hacking", "provider": "TCM Security", "url": "#", "hours": 25, "free": false },
+      { "title": "TryHackMe - Complete Beginner Path", "provider": "TryHackMe", "url": "#", "hours": 20, "free": true }
+    ]
+  },
+  {
+    "skill": "Git",
+    "priority": 1,
+    "courses": [
+      { "title": "Git & GitHub - The Complete Git Guide", "provider": "Udemy", "url": "#", "hours": 6, "free": false },
+      { "title": "Pro Git Book", "provider": "git-scm.com", "url": "#", "hours": 8, "free": true }
+    ]
+  },
+  {
+    "skill": "REST APIs",
+    "priority": 1,
+    "courses": [
+      { "title": "REST API Design, Development & Management", "provider": "Udemy", "url": "#", "hours": 8, "free": false },
+      { "title": "RESTful Web Services Tutorial", "provider": "restfulapi.net", "url": "#", "hours": 3, "free": true }
+    ]
+  },
+  {
+    "skill": "Security",
+    "priority": 2,
+    "courses": [
+      { "title": "Web Application Security Fundamentals", "provider": "OWASP Foundation", "url": "#", "hours": 8, "free": true },
+      { "title": "Application Security and the OWASP Top 10", "provider": "Pluralsight", "url": "#", "hours": 5, "free": false }
+    ]
+  },
+  {
+    "skill": "Statistics",
+    "priority": 1,
+    "courses": [
+      { "title": "Statistics and Probability", "provider": "Khan Academy", "url": "#", "hours": 20, "free": true },
+      { "title": "Statistics for Data Science and Business Analysis", "provider": "Udemy", "url": "#", "hours": 10, "free": false }
+    ]
+  },
+  {
+    "skill": "Data Visualization",
+    "priority": 2,
+    "courses": [
+      { "title": "Data Visualization with Python", "provider": "Coursera / IBM", "url": "#", "hours": 12, "free": false },
+      { "title": "D3.js Tutorial", "provider": "observablehq.com", "url": "#", "hours": 6, "free": true }
+    ]
+  }
+]

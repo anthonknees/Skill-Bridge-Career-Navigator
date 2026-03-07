@@ -1,0 +1,137 @@
+[
+  {
+    "id": "jd-001",
+    "title": "Cloud Engineer",
+    "company": "Synthetic Corp",
+    "category": "Cloud",
+    "required_skills": ["AWS", "Terraform", "Docker", "Kubernetes", "CI/CD", "Python", "Linux", "Networking"],
+    "nice_to_have": ["GCP", "Ansible", "Prometheus"],
+    "description": "We are looking for a Cloud Engineer to design, implement, and manage cloud infrastructure on AWS. You will work with containerized workloads, automate deployments with Terraform, and ensure high availability."
+  },
+  {
+    "id": "jd-002",
+    "title": "Cloud Architect",
+    "company": "CloudFirst Solutions",
+    "category": "Cloud",
+    "required_skills": ["AWS", "GCP", "Azure", "Terraform", "Kubernetes", "Microservices", "Networking", "Security"],
+    "nice_to_have": ["Pulumi", "Istio", "FinOps"],
+    "description": "Design and oversee multi-cloud architectures for enterprise clients. Drive cloud strategy, ensure compliance, and mentor engineering teams on cloud best practices."
+  },
+  {
+    "id": "jd-003",
+    "title": "DevOps Engineer",
+    "company": "Pipeline Labs",
+    "category": "Cloud",
+    "required_skills": ["Docker", "Kubernetes", "CI/CD", "Jenkins", "Python", "Bash", "Linux", "Git"],
+    "nice_to_have": ["ArgoCD", "Helm", "Prometheus", "Grafana"],
+    "description": "Build and maintain CI/CD pipelines, manage container orchestration, and automate infrastructure. You will bridge development and operations to accelerate software delivery."
+  },
+  {
+    "id": "jd-004",
+    "title": "Frontend Developer",
+    "company": "UI Craft Co",
+    "category": "Frontend",
+    "required_skills": ["React", "JavaScript", "HTML", "CSS", "TypeScript", "Git", "REST APIs"],
+    "nice_to_have": ["Next.js", "GraphQL", "Storybook", "Testing Library"],
+    "description": "Build responsive, accessible web applications using React and TypeScript. Collaborate with designers to translate Figma mockups into polished UI components."
+  },
+  {
+    "id": "jd-005",
+    "title": "Senior Frontend Engineer",
+    "company": "WebScale Inc",
+    "category": "Frontend",
+    "required_skills": ["React", "TypeScript", "JavaScript", "CSS", "Webpack", "Testing Library", "Git", "Performance Optimization"],
+    "nice_to_have": ["Next.js", "GraphQL", "Micro Frontends", "Web Accessibility"],
+    "description": "Lead frontend architecture decisions, mentor junior developers, and drive performance improvements. Own critical user-facing features from design review to production."
+  },
+  {
+    "id": "jd-006",
+    "title": "React Native Developer",
+    "company": "MobileFirst",
+    "category": "Frontend",
+    "required_skills": ["React Native", "JavaScript", "TypeScript", "iOS", "Android", "REST APIs", "Git"],
+    "nice_to_have": ["Expo", "Redux", "Firebase", "App Store deployment"],
+    "description": "Develop cross-platform mobile applications using React Native. Deliver smooth, performant apps for both iOS and Android from a single codebase."
+  },
+  {
+    "id": "jd-007",
+    "title": "Backend Developer",
+    "company": "API Solutions",
+    "category": "Backend",
+    "required_skills": ["Node.js", "Python", "REST APIs", "SQL", "PostgreSQL", "Git", "Docker"],
+    "nice_to_have": ["GraphQL", "Redis", "Kafka", "Microservices"],
+    "description": "Design and build scalable backend services and RESTful APIs. Work with relational databases, optimize queries, and ensure high availability of services."
+  },
+  {
+    "id": "jd-008",
+    "title": "Python Backend Engineer",
+    "company": "DataPipe Corp",
+    "category": "Backend",
+    "required_skills": ["Python", "Django", "REST APIs", "PostgreSQL", "SQL", "Docker", "Git", "Linux"],
+    "nice_to_have": ["FastAPI", "Celery", "Redis", "AWS"],
+    "description": "Build and maintain Python-based backend services using Django. Integrate with data pipelines, write clean APIs, and optimize database performance."
+  },
+  {
+    "id": "jd-009",
+    "title": "Full Stack Engineer",
+    "company": "Venture Build",
+    "category": "Backend",
+    "required_skills": ["JavaScript", "Node.js", "React", "SQL", "PostgreSQL", "REST APIs", "Git", "Docker"],
+    "nice_to_have": ["TypeScript", "Redis", "AWS", "CI/CD"],
+    "description": "Own features end-to-end from database schema to React UI. Work in a fast-paced startup environment shipping weekly releases."
+  },
+  {
+    "id": "jd-010",
+    "title": "Data Engineer",
+    "company": "Insights Corp",
+    "category": "Data",
+    "required_skills": ["Python", "SQL", "Apache Spark", "Airflow", "AWS", "ETL", "PostgreSQL", "Git"],
+    "nice_to_have": ["dbt", "Snowflake", "Kafka", "Scala"],
+    "description": "Build and maintain data pipelines that power analytics and ML workloads. Design ETL processes, optimize Spark jobs, and ensure data quality."
+  },
+  {
+    "id": "jd-011",
+    "title": "Data Analyst",
+    "company": "Analytics House",
+    "category": "Data",
+    "required_skills": ["SQL", "Python", "Tableau", "Excel", "Statistics", "Data Visualization", "Git"],
+    "nice_to_have": ["R", "Power BI", "dbt", "Looker"],
+    "description": "Transform raw data into actionable insights. Build dashboards, write SQL queries, and partner with stakeholders to answer business questions with data."
+  },
+  {
+    "id": "jd-012",
+    "title": "Machine Learning Engineer",
+    "company": "AI Labs",
+    "category": "Data",
+    "required_skills": ["Python", "Machine Learning", "TensorFlow", "PyTorch", "SQL", "Statistics", "Git", "Docker"],
+    "nice_to_have": ["MLflow", "Kubernetes", "AWS SageMaker", "Feature Engineering"],
+    "description": "Build and deploy ML models at scale. Own the full ML lifecycle from experimentation to production deployment, monitoring, and retraining."
+  },
+  {
+    "id": "jd-013",
+    "title": "Security Engineer",
+    "company": "SecureNet",
+    "category": "Security",
+    "required_skills": ["Network Security", "Linux", "Python", "SIEM", "Penetration Testing", "Firewalls", "Risk Assessment", "Git"],
+    "nice_to_have": ["CISSP", "CEH", "AWS Security", "Splunk"],
+    "description": "Protect company assets through proactive threat detection, vulnerability assessments, and incident response. Design security controls and drive security-first culture."
+  },
+  {
+    "id": "jd-014",
+    "title": "Application Security Engineer",
+    "company": "AppSec Ventures",
+    "category": "Security",
+    "required_skills": ["OWASP", "Python", "JavaScript", "Penetration Testing", "Code Review", "Git", "SQL", "Docker"],
+    "nice_to_have": ["Burp Suite", "SAST/DAST tools", "Kubernetes", "AWS"],
+    "description": "Embed security into the SDLC. Conduct code reviews, run penetration tests, and guide developers on secure coding practices to minimize application vulnerabilities."
+  },
+  {
+    "id": "jd-015",
+    "title": "Site Reliability Engineer",
+    "company": "Uptime Labs",
+    "category": "Cloud",
+    "required_skills": ["Linux", "Python", "Kubernetes", "Prometheus", "Grafana", "CI/CD", "Docker", "Networking"],
+    "nice_to_have": ["Go", "Terraform", "AWS", "Chaos Engineering"],
+    "description": "Ensure system reliability, scalability, and performance. Define SLOs, build alerting pipelines, and drive post-mortems to reduce toil and improve uptime."
+  }
+]

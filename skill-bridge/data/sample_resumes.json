@@ -1,0 +1,54 @@
+[
+  {
+    "id": "resume-001",
+    "name": "Alex Demo",
+    "summary": "Recent CS graduate with experience in web development and scripting. Looking to transition into backend engineering.",
+    "skills": ["Python", "JavaScript", "SQL", "Git", "HTML", "CSS", "React", "Node.js"],
+    "experience": [
+      { "title": "Software Development Intern", "company": "StartupCo", "duration": "3 months", "description": "Built internal tools using Python and JavaScript." }
+    ],
+    "education": "B.S. Computer Science, State University, 2024"
+  },
+  {
+    "id": "resume-002",
+    "name": "Jordan Smith",
+    "summary": "3 years of frontend experience with React and TypeScript. Seeking to grow into full-stack or cloud roles.",
+    "skills": ["React", "TypeScript", "JavaScript", "HTML", "CSS", "Git", "REST APIs", "Node.js"],
+    "experience": [
+      { "title": "Frontend Developer", "company": "WebAgency", "duration": "2 years", "description": "Developed React applications for e-commerce clients." },
+      { "title": "Junior Frontend Dev", "company": "TechStartup", "duration": "1 year", "description": "Built UI components in vanilla JavaScript." }
+    ],
+    "education": "B.S. Information Technology, Tech University, 2021"
+  },
+  {
+    "id": "resume-003",
+    "name": "Morgan Lee",
+    "summary": "Data analyst with 2 years of SQL and Python experience. Looking to move into data engineering or ML engineering.",
+    "skills": ["Python", "SQL", "Tableau", "Excel", "Statistics", "Git", "PostgreSQL", "Data Visualization"],
+    "experience": [
+      { "title": "Data Analyst", "company": "Analytics Co", "duration": "2 years", "description": "Wrote SQL queries and built Tableau dashboards for business stakeholders." }
+    ],
+    "education": "B.S. Statistics, Data University, 2022"
+  },
+  {
+    "id": "resume-004",
+    "name": "Casey Rivers",
+    "summary": "Backend engineer with 4 years of experience in Python and Node.js. Comfortable with Docker and looking to deepen cloud expertise.",
+    "skills": ["Python", "Node.js", "JavaScript", "PostgreSQL", "SQL", "Docker", "Git", "REST APIs", "Linux"],
+    "experience": [
+      { "title": "Backend Engineer", "company": "SaaS Corp", "duration": "3 years", "description": "Designed and maintained RESTful APIs serving 100k+ daily users." },
+      { "title": "Junior Backend Developer", "company": "Dev House", "duration": "1 year", "description": "Wrote Python scripts and maintained PostgreSQL schemas." }
+    ],
+    "education": "B.S. Computer Engineering, State Tech, 2020"
+  },
+  {
+    "id": "resume-005",
+    "name": "Riley Chen",
+    "summary": "Recent bootcamp graduate eager to start a career in cybersecurity. Strong in networking fundamentals and Linux administration.",
+    "skills": ["Linux", "Networking", "Python", "Git", "Bash", "SQL"],
+    "experience": [
+      { "title": "IT Support Technician", "company": "HelpDesk Inc", "duration": "1 year", "description": "Maintained Linux servers and handled network troubleshooting tickets." }
+    ],
+    "education": "Cybersecurity Bootcamp Certificate, 2024; A.A. Information Systems, Community College, 2023"
+  }
+]
