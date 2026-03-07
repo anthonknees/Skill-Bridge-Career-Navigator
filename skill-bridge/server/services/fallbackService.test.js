@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { extractSkills } from './fallbackService.js'
+import { extractSkills, analyzeGap, generateRoadmap } from './fallbackService.js'
 
 describe('fallbackService.extractSkills', () => {
   it('returns known skills found in resume text', () => {
@@ -25,5 +25,66 @@ describe('fallbackService.extractSkills', () => {
     expect(skills).toContain('Go')
     expect(skills).toContain('Kubernetes')
     expect(skills).toContain('AWS')
+  })
+})
+
+describe('fallbackService.analyzeGap', () => {
+  it('returns matched, missing, and matchPercentage for a partial match', () => {
+    // Cloud Engineer (jd-001) requires: AWS, Terraform, Docker, Kubernetes, CI/CD, Python, Linux, Networking
+    const skills = ['Python', 'Docker', 'Linux']
+    const result = analyzeGap(skills, 'jd-001')
+    expect(result).toHaveProperty('matchedSkills')
+    expect(result).toHaveProperty('missingSkills')
+    expect(result).toHaveProperty('matchPercentage')
+    expect(result).toHaveProperty('targetSkills')
+    expect(result.matchedSkills).toContain('Python')
+    expect(result.matchedSkills).toContain('Docker')
+    expect(result.matchedSkills).toContain('Linux')
+    expect(result.missingSkills).toContain('AWS')
+    expect(result.missingSkills).toContain('Terraform')
+    expect(result.matchPercentage).toBeGreaterThan(0)
+    expect(result.matchPercentage).toBeLessThan(100)
+  })
+
+  it('returns 0% match when no skills overlap', () => {
+    // Cloud Engineer requires AWS, Terraform, Docker, etc. — none of these are frontend skills
+    const skills = ['React', 'TypeScript', 'CSS']
+    const result = analyzeGap(skills, 'jd-001')
+    expect(result.matchPercentage).toBe(0)
+    expect(result.matchedSkills.length).toBe(0)
+    expect(result.missingSkills.length).toBeGreaterThan(0)
+  })
+
+  it('returns 100% match when all required skills are present', () => {
+    // Cloud Engineer (jd-001) requires: AWS, Terraform, Docker, Kubernetes, CI/CD, Python, Linux, Networking
+    const skills = ['AWS', 'Terraform', 'Docker', 'Kubernetes', 'CI/CD', 'Python', 'Linux', 'Networking']
+    const result = analyzeGap(skills, 'jd-001')
+    expect(result.matchPercentage).toBe(100)
+    expect(result.matchedSkills.length).toBe(8)
+    expect(result.missingSkills.length).toBe(0)
+  })
+})
+
+describe('fallbackService.generateRoadmap', () => {
+  it('returns a roadmap with courses for each missing skill', () => {
+    const result = generateRoadmap(['AWS', 'Docker', 'Kubernetes'])
+    expect(Array.isArray(result)).toBe(true)
+    expect(result.length).toBe(3)
+    result.forEach(entry => {
+      expect(entry).toHaveProperty('skill')
+      expect(entry).toHaveProperty('priority')
+      expect(entry).toHaveProperty('courses')
+      expect(Array.isArray(entry.courses)).toBe(true)
+      expect(entry.courses.length).toBeGreaterThan(0)
+    })
+    // Lower priority number = higher priority, so AWS/Docker (priority 1) should come before Kubernetes (priority 2)
+    const priorities = result.map(e => e.priority)
+    expect(priorities).toEqual([...priorities].sort((a, b) => a - b))
+  })
+
+  it('returns empty array when missingSkills is empty', () => {
+    const result = generateRoadmap([])
+    expect(Array.isArray(result)).toBe(true)
+    expect(result.length).toBe(0)
   })
 })

@@ -10,6 +10,8 @@ function loadJson(filename) {
 }
 
 const taxonomy = loadJson('skills_taxonomy.json')
+const jobs = loadJson('job_descriptions.json')
+const coursesData = loadJson('courses.json')
 
 // Build alias → canonical name lookup map
 const aliasMap = new Map()
@@ -39,4 +41,35 @@ export function extractSkills(resumeText) {
   }
 
   return [...found]
+}
+
+export function analyzeGap(candidateSkills, jobId) {
+  const job = jobs.find(j => j.id === jobId)
+  if (!job) throw new Error(`Job not found: ${jobId}`)
+
+  const targetSkills = job.required_skills
+  const candidateSet = new Set(candidateSkills.map(s => s.toLowerCase()))
+
+  const matchedSkills = targetSkills.filter(s => candidateSet.has(s.toLowerCase()))
+  const missingSkills = targetSkills.filter(s => !candidateSet.has(s.toLowerCase()))
+  const matchPercentage = Math.round((matchedSkills.length / targetSkills.length) * 100)
+
+  return { targetSkills, matchedSkills, missingSkills, matchPercentage }
+}
+
+export function generateRoadmap(missingSkills) {
+  if (!missingSkills || missingSkills.length === 0) return []
+
+  const courseMap = new Map(coursesData.map(entry => [entry.skill, entry]))
+
+  return missingSkills
+    .map(skill => {
+      const entry = courseMap.get(skill)
+      return {
+        skill,
+        priority: entry ? entry.priority : 3,
+        courses: entry ? entry.courses : [],
+      }
+    })
+    .sort((a, b) => a.priority - b.priority)
 }
