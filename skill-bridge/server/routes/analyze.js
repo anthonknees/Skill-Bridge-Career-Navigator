@@ -1,9 +1,10 @@
 import { Router } from 'express'
-import { extractSkills, analyzeGap } from '../services/fallbackService.js'
+import * as aiService from '../services/aiService.js'
+import * as fallback from '../services/fallbackService.js'
 
 const router = Router()
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { resumeText, targetRole } = req.body
 
   if (!resumeText || resumeText.trim() === '') {
@@ -14,17 +15,22 @@ router.post('/', (req, res) => {
     return res.status(400).json({ error: 'targetRole is required' })
   }
 
-  const extractedSkills = extractSkills(resumeText)
-  const { targetSkills, matchedSkills, missingSkills, matchPercentage } = analyzeGap(extractedSkills, targetRole)
-
-  res.json({
-    extractedSkills,
-    targetSkills,
-    matchedSkills,
-    missingSkills,
-    matchPercentage,
-    mode: 'fallback',
-  })
+  try {
+    const extractedSkills = await aiService.extractSkills(resumeText)
+    const { targetSkills, matched, missing, matchPercentage } = await aiService.analyzeGap(extractedSkills, targetRole)
+    return res.json({
+      extractedSkills,
+      targetSkills,
+      matchedSkills: matched,
+      missingSkills: missing,
+      matchPercentage,
+      mode: 'ai',
+    })
+  } catch {
+    const extractedSkills = fallback.extractSkills(resumeText)
+    const { targetSkills, matchedSkills, missingSkills, matchPercentage } = fallback.analyzeGap(extractedSkills, targetRole)
+    return res.json({ extractedSkills, targetSkills, matchedSkills, missingSkills, matchPercentage, mode: 'fallback' })
+  }
 })
 
 export default router

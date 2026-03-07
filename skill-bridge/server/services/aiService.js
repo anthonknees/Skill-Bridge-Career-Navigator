@@ -61,7 +61,7 @@ Return JSON:
 }`)
 
   const parsed = JSON.parse(content)
-  return parsed
+  return { ...parsed, targetSkills: job.required_skills }
 }
 
 export async function generateRoadmap(missingSkills, timeframe) {

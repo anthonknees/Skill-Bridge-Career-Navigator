@@ -1,8 +1,17 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import request from 'supertest'
 import app from '../index.js'
+import * as aiService from '../services/aiService.js'
+
+vi.mock('../services/aiService.js')
 
 describe('POST /api/generate-roadmap', () => {
+  beforeEach(() => {
+    vi.resetAllMocks()
+    // Default: AI throws so tests run through the fallback path
+    aiService.generateRoadmap.mockRejectedValue(new Error('AI unavailable'))
+  })
+
   it('returns a roadmap array with correct shape for valid input', async () => {
     const res = await request(app)
       .post('/api/generate-roadmap')
