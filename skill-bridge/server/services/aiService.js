@@ -93,18 +93,22 @@ Analysis data:
 - Top missing skills (by market demand): ${topMissing.join(', ') || 'None'}`)
 }
 
-export async function generateRoadmap(missingSkills, timeframe) {
+export async function generateRoadmap(missingSkills, timeframe, frequencyData) {
+  const freqSection = frequencyData && frequencyData.length > 0
+    ? `\nFrequency data (how often each skill appears in job postings): ${JSON.stringify(frequencyData)}\nFor each skill, also assign an importance level: high, medium, or low based on how frequently it appears in job postings.`
+    : ''
+
   const content = await callAI(`You are a learning path advisor. Create a prioritized study roadmap for these missing skills.
 The user wants to be job-ready within ${timeframe}.
 
-Missing skills: ${JSON.stringify(missingSkills)}
+Missing skills: ${JSON.stringify(missingSkills)}${freqSection}
 
 For each skill, suggest 1-2 specific learning resources (real or plausible course names).
 Order by priority (foundational skills first, specialized skills later).
 
 IMPORTANT: Respond with ONLY a raw JSON array. No explanation, no markdown, no prose before or after.
 
-[{ "skill": "...", "priority": 1, "reason": "...", "estimatedWeeks": 2,
+[{ "skill": "...", "priority": 1, "importance": "high|medium|low", "reason": "...", "estimatedWeeks": 2,
    "courses": [{ "title": "...", "provider": "...", "hours": 10, "free": true }] }]`)
 
   const parsed = parseJSON(content)

@@ -110,17 +110,28 @@ export function getSkillFrequency(category) {
     .sort((a, b) => b.count - a.count)
 }
 
-export function generateRoadmap(missingSkills) {
+function frequencyToImportance(frequency) {
+  if (frequency >= 75) return 'high'
+  if (frequency >= 40) return 'medium'
+  return 'low'
+}
+
+export function generateRoadmap(missingSkills, frequencyData) {
   if (!missingSkills || missingSkills.length === 0) return []
 
   const courseMap = new Map(coursesData.map(entry => [entry.skill, entry]))
+  const freqMap = frequencyData
+    ? new Map(frequencyData.map(({ skill, frequency }) => [skill, frequency]))
+    : null
 
   return missingSkills
     .map(skill => {
       const entry = courseMap.get(skill)
+      const frequency = freqMap ? freqMap.get(skill) : null
       return {
         skill,
         priority: entry ? entry.priority : 3,
+        importance: frequency != null ? frequencyToImportance(frequency) : 'medium',
         courses: entry ? entry.courses : [],
       }
     })

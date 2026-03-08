@@ -25,6 +25,7 @@ describe('POST /api/generate-roadmap', () => {
     res.body.roadmap.forEach(entry => {
       expect(entry).toHaveProperty('skill')
       expect(entry).toHaveProperty('priority')
+      expect(entry).toHaveProperty('importance')
       expect(entry).toHaveProperty('courses')
       expect(Array.isArray(entry.courses)).toBe(true)
     })

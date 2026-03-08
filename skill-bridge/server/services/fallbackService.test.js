@@ -73,6 +73,7 @@ describe('fallbackService.generateRoadmap', () => {
     result.forEach(entry => {
       expect(entry).toHaveProperty('skill')
       expect(entry).toHaveProperty('priority')
+      expect(entry).toHaveProperty('importance')
       expect(entry).toHaveProperty('courses')
       expect(Array.isArray(entry.courses)).toBe(true)
       expect(entry.courses.length).toBeGreaterThan(0)
@@ -86,6 +87,26 @@ describe('fallbackService.generateRoadmap', () => {
     const result = generateRoadmap([])
     expect(Array.isArray(result)).toBe(true)
     expect(result.length).toBe(0)
+  })
+
+  it('assigns correct importance levels from frequencyData', () => {
+    const frequencyData = [
+      { skill: 'AWS', frequency: 80, totalJobs: 10 },
+      { skill: 'Docker', frequency: 50, totalJobs: 10 },
+      { skill: 'Terraform', frequency: 20, totalJobs: 10 },
+    ]
+    const result = generateRoadmap(['AWS', 'Docker', 'Terraform'], frequencyData)
+    const bySkill = Object.fromEntries(result.map(e => [e.skill, e]))
+    expect(bySkill['AWS'].importance).toBe('high')
+    expect(bySkill['Docker'].importance).toBe('medium')
+    expect(bySkill['Terraform'].importance).toBe('low')
+  })
+
+  it('defaults all items to "medium" importance when no frequencyData is provided', () => {
+    const result = generateRoadmap(['AWS', 'Docker'])
+    result.forEach(entry => {
+      expect(entry.importance).toBe('medium')
+    })
   })
 })
 
