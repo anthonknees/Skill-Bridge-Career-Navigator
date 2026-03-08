@@ -4,6 +4,9 @@
 
 Skill-Bridge is a career navigation platform where you paste your resume, pick a target job role, and instantly see which skills you have, which you're missing, and a prioritized learning roadmap to close the gap. The analysis is powered by OpenAI GPT-4o-mini with a full rule-based fallback so the app works even without an API key.
 
+## Video Demo
+[Watch the demo](https://youtube.com) — *Link will be updated once uploaded*
+
 ## Tech Stack
 
 - **Frontend:** React 19, Vite, Tailwind CSS, React Router v6
