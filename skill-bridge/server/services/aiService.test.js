@@ -46,10 +46,11 @@ describe('aiService', () => {
   })
 
   describe('analyzeGap', () => {
-    it('returns correct shape with matched, missing, and matchPercentage', async () => {
+    it('returns correct shape with matched, missing, transferable, and matchPercentage', async () => {
       const mockResponse = JSON.stringify({
         matched: ['Python'],
         missing: [{ skill: 'AWS', importance: 'high', reason: 'Core cloud platform for this role.' }],
+        transferable: [{ skill: 'Communication', relevance: 'Cross-team collaboration in cloud engineering.' }],
         matchPercentage: 25,
       })
       await mockOpenAI(mockResponse)()
@@ -59,9 +60,11 @@ describe('aiService', () => {
 
       expect(result).toHaveProperty('matched')
       expect(result).toHaveProperty('missing')
+      expect(result).toHaveProperty('transferable')
       expect(result).toHaveProperty('matchPercentage')
       expect(Array.isArray(result.matched)).toBe(true)
       expect(Array.isArray(result.missing)).toBe(true)
+      expect(Array.isArray(result.transferable)).toBe(true)
       expect(typeof result.matchPercentage).toBe('number')
     })
   })

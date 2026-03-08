@@ -5,6 +5,13 @@ function normalizeMissing(missingSkills) {
   )
 }
 
+// Normalize transferableSkills — AI mode returns [{skill,relevance}], fallback returns strings
+function normalizeTransferable(transferableSkills) {
+  return (transferableSkills || []).map(s =>
+    typeof s === 'string' ? { skill: s, relevance: null } : s
+  )
+}
+
 function ModeBadge({ mode }) {
   if (mode === 'ai') {
     return (
@@ -37,8 +44,9 @@ function ImportanceBadge({ importance }) {
 }
 
 export default function GapAnalysis({ data }) {
-  const { extractedSkills = [], targetSkills = [], matchedSkills = [], missingSkills = [], matchPercentage = 0, mode } = data
+  const { extractedSkills = [], targetSkills = [], matchedSkills = [], missingSkills = [], transferableSkills = [], matchPercentage = 0, mode } = data
   const missing = normalizeMissing(missingSkills)
+  const transferable = normalizeTransferable(transferableSkills)
 
   const matchColor =
     matchPercentage >= 70 ? 'text-green-600' :
@@ -76,10 +84,15 @@ export default function GapAnalysis({ data }) {
           <span>{missing.length} missing</span>
           <span>{targetSkills.length} required total</span>
         </div>
+        {transferable.length > 0 && (
+          <p className="mt-3 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+            You also have <span className="font-semibold">{transferable.length} transferable skill{transferable.length !== 1 ? 's' : ''}</span> that are valuable in this field.
+          </p>
+        )}
       </div>
 
       {/* Skills grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Matched */}
         <div className="bg-white rounded-xl border border-green-200 shadow-sm p-4">
           <h3 className="text-sm font-semibold text-green-700 mb-3 flex items-center gap-2">
@@ -94,6 +107,30 @@ export default function GapAnalysis({ data }) {
                 <span key={skill} className="text-xs font-medium bg-green-50 text-green-700 border border-green-200 px-2.5 py-1 rounded-full">
                   {skill}
                 </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Transferable */}
+        <div className="bg-white rounded-xl border border-amber-200 shadow-sm p-4">
+          <h3 className="text-sm font-semibold text-amber-700 mb-3 flex items-center gap-2">
+            <span className="text-base">⇄</span>
+            Transferable ({transferable.length})
+          </h3>
+          {transferable.length === 0 ? (
+            <p className="text-sm text-slate-400 italic">No transferable skills detected</p>
+          ) : (
+            <div className="flex flex-col gap-2">
+              {transferable.map(({ skill, relevance }) => (
+                <div key={skill} className="flex flex-wrap items-start gap-2">
+                  <span className="text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-1 rounded-full">
+                    {skill}
+                  </span>
+                  {relevance && (
+                    <p className="w-full text-xs text-slate-500 mt-0.5 pl-1">{relevance}</p>
+                  )}
+                </div>
               ))}
             </div>
           )}

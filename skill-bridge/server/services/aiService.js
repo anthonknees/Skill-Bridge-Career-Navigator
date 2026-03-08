@@ -19,6 +19,18 @@ async function callAI(prompt) {
   return response.choices[0].message.content
 }
 
+// Extract and parse the first JSON array or object from the response.
+// Handles markdown fences (```json...```) and any leading/trailing prose.
+function parseJSON(content) {
+  const fenceStripped = content.replace(/```(?:json)?\s*/gi, '').replace(/```/g, '').trim()
+  const start = Math.min(
+    fenceStripped.indexOf('[') === -1 ? Infinity : fenceStripped.indexOf('['),
+    fenceStripped.indexOf('{') === -1 ? Infinity : fenceStripped.indexOf('{'),
+  )
+  if (start === Infinity) throw new Error('No JSON found in AI response')
+  return JSON.parse(fenceStripped.slice(start))
+}
+
 export async function extractSkills(resumeText) {
   const content = await callAI(`You are a resume analysis assistant. Extract technical skills from the following resume text.
 
@@ -32,7 +44,7 @@ ${resumeText}
 
 Output format: ["skill1", "skill2", ...]`)
 
-  const parsed = JSON.parse(content)
+  const parsed = parseJSON(content)
 
   // Handle both ["skill1", ...] and {"skills": [...]} shaped responses
   if (Array.isArray(parsed)) return parsed
@@ -52,15 +64,17 @@ Target role: ${job.title}
 Required skills for this role: ${JSON.stringify(job.required_skills)}
 
 For each missing skill, briefly explain why it matters for this role (1 sentence).
+Additionally, identify which of the candidate's existing skills are transferable to the target role's industry, even if they aren't listed as required skills. For each transferable skill, briefly explain how it applies to the new field.
 
 Return JSON:
 {
   "matched": [...],
   "missing": [{ "skill": "AWS", "importance": "high|medium|low", "reason": "..." }],
+  "transferable": [{ "skill": "Communication", "relevance": "Essential for cross-team collaboration in cloud engineering" }],
   "matchPercentage": number
 }`)
 
-  const parsed = JSON.parse(content)
+  const parsed = parseJSON(content)
   return { ...parsed, targetSkills: job.required_skills }
 }
 
@@ -73,11 +87,12 @@ Missing skills: ${JSON.stringify(missingSkills)}
 For each skill, suggest 1-2 specific learning resources (real or plausible course names).
 Order by priority (foundational skills first, specialized skills later).
 
-Return JSON array:
+IMPORTANT: Respond with ONLY a raw JSON array. No explanation, no markdown, no prose before or after.
+
 [{ "skill": "...", "priority": 1, "reason": "...", "estimatedWeeks": 2,
    "courses": [{ "title": "...", "provider": "...", "hours": 10, "free": true }] }]`)
 
-  const parsed = JSON.parse(content)
+  const parsed = parseJSON(content)
   if (Array.isArray(parsed)) return parsed
   const key = Object.keys(parsed).find(k => Array.isArray(parsed[k]))
   if (key) return parsed[key]

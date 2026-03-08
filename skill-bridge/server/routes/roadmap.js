@@ -15,8 +15,8 @@ router.post('/', async (req, res) => {
     try {
       const roadmap = await aiService.generateRoadmap(missingSkills, timeframe)
       return res.json({ roadmap, mode: 'ai' })
-    } catch {
-      // fall through to fallback
+    } catch (err) {
+      console.error('[roadmap] AI failed, using fallback:', err.message)
     }
   }
 

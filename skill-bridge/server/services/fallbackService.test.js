@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { extractSkills, analyzeGap, generateRoadmap } from './fallbackService.js'
+import { extractSkills, analyzeGap, generateRoadmap, identifyTransferableSkills } from './fallbackService.js'
 
 describe('fallbackService.extractSkills', () => {
   it('returns known skills found in resume text', () => {
@@ -86,5 +86,32 @@ describe('fallbackService.generateRoadmap', () => {
     const result = generateRoadmap([])
     expect(Array.isArray(result)).toBe(true)
     expect(result.length).toBe(0)
+  })
+})
+
+describe('fallbackService.identifyTransferableSkills', () => {
+  it('returns transferable skills for a career switcher targeting a different category', () => {
+    // Marketing-type skills: Communication and Data Analysis transfer to Cloud
+    const userSkills = ['Communication', 'Data Analysis', 'Project Management']
+    const result = identifyTransferableSkills(userSkills, 'Cloud')
+    expect(result).toHaveProperty('transferable')
+    expect(result).toHaveProperty('notRelevant')
+    expect(result.transferable).toContain('Communication')
+    expect(result.transferable).toContain('Data Analysis')
+  })
+
+  it('returns empty transferable array when user skills are already in the target category', () => {
+    // Cloud skills targeting Cloud — handled by analyzeGap as matched/missing, not transferable
+    const userSkills = ['AWS', 'Docker', 'Kubernetes']
+    const result = identifyTransferableSkills(userSkills, 'Cloud')
+    expect(result.transferable).toEqual([])
+  })
+
+  it('returns empty transferable array when no user skills transfer to the target category', () => {
+    // Frontend-only skills with no transferable_to Cloud entry
+    const userSkills = ['React', 'CSS', 'HTML']
+    const result = identifyTransferableSkills(userSkills, 'Cloud')
+    expect(result.transferable).toEqual([])
+    expect(result.notRelevant.length).toBeGreaterThan(0)
   })
 })

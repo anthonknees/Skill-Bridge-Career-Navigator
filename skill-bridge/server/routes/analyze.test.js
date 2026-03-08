@@ -68,11 +68,12 @@ describe('POST /api/analyze-resume', () => {
     expect(res.body.mode).toBe('fallback')
   })
 
-  it('returns mode: "ai" when AI succeeds', async () => {
+  it('returns mode: "ai" with transferableSkills when AI succeeds', async () => {
     aiService.extractSkills.mockResolvedValue(['Python'])
     aiService.analyzeGap.mockResolvedValue({
       matched: ['Python'],
       missing: [{ skill: 'AWS', importance: 'high', reason: 'Core cloud platform for this role.' }],
+      transferable: [{ skill: 'Communication', relevance: 'Cross-team collaboration in cloud engineering.' }],
       matchPercentage: 25,
       targetSkills: ['AWS', 'Terraform', 'Docker', 'Python', 'Linux'],
     })
@@ -86,6 +87,23 @@ describe('POST /api/analyze-resume', () => {
     expect(Array.isArray(res.body.extractedSkills)).toBe(true)
     expect(Array.isArray(res.body.matchedSkills)).toBe(true)
     expect(Array.isArray(res.body.missingSkills)).toBe(true)
+    expect(Array.isArray(res.body.transferableSkills)).toBe(true)
     expect(typeof res.body.matchPercentage).toBe('number')
+  })
+
+  it('returns transferableSkills in fallback mode', async () => {
+    // aiService.extractSkills already mocked to throw via beforeEach
+    // Resume with soft skills that transfer to the Cloud category
+    const res = await request(app)
+      .post('/api/analyze-resume')
+      .send({
+        resumeText: 'I am experienced in communication, project management, and data analysis.',
+        targetRole: 'jd-001',
+      })
+
+    expect(res.status).toBe(200)
+    expect(res.body.mode).toBe('fallback')
+    expect(res.body).toHaveProperty('transferableSkills')
+    expect(Array.isArray(res.body.transferableSkills)).toBe(true)
   })
 })

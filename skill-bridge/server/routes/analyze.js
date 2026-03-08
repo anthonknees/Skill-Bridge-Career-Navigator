@@ -18,23 +18,25 @@ router.post('/', async (req, res) => {
   if (req.query.forceMode !== 'fallback') {
     try {
       const extractedSkills = await aiService.extractSkills(resumeText)
-      const { targetSkills, matched, missing, matchPercentage } = await aiService.analyzeGap(extractedSkills, targetRole)
+      const { targetSkills, matched, missing, transferable, matchPercentage } = await aiService.analyzeGap(extractedSkills, targetRole)
       return res.json({
         extractedSkills,
         targetSkills,
         matchedSkills: matched,
         missingSkills: missing,
+        transferableSkills: transferable ?? [],
         matchPercentage,
         mode: 'ai',
       })
-    } catch {
-      // fall through to fallback
+    } catch (err) {
+      console.error('[analyze] AI failed, using fallback:', err.message)
     }
   }
 
   const extractedSkills = fallback.extractSkills(resumeText)
-  const { targetSkills, matchedSkills, missingSkills, matchPercentage } = fallback.analyzeGap(extractedSkills, targetRole)
-  return res.json({ extractedSkills, targetSkills, matchedSkills, missingSkills, matchPercentage, mode: 'fallback' })
+  const { targetSkills, matchedSkills, missingSkills, matchPercentage, jobCategory } = fallback.analyzeGap(extractedSkills, targetRole)
+  const { transferable: transferableSkills } = fallback.identifyTransferableSkills(extractedSkills, jobCategory)
+  return res.json({ extractedSkills, targetSkills, matchedSkills, missingSkills, matchPercentage, transferableSkills, mode: 'fallback' })
 })
 
 export default router

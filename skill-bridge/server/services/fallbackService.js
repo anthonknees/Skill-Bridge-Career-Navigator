@@ -54,7 +54,28 @@ export function analyzeGap(candidateSkills, jobId) {
   const missingSkills = targetSkills.filter(s => !candidateSet.has(s.toLowerCase()))
   const matchPercentage = Math.round((matchedSkills.length / targetSkills.length) * 100)
 
-  return { targetSkills, matchedSkills, missingSkills, matchPercentage }
+  return { targetSkills, matchedSkills, missingSkills, matchPercentage, jobCategory: job.category }
+}
+
+export function identifyTransferableSkills(userSkills, targetRoleCategory) {
+  const transferable = []
+  const notRelevant = []
+
+  for (const skill of userSkills) {
+    const entry = taxonomy[skill]
+    if (!entry) continue
+
+    // Skills in the same category are handled by analyzeGap (matched/missing)
+    if (entry.category === targetRoleCategory) continue
+
+    if (entry.transferable_to && entry.transferable_to.includes(targetRoleCategory)) {
+      transferable.push(skill)
+    } else {
+      notRelevant.push(skill)
+    }
+  }
+
+  return { transferable, notRelevant }
 }
 
 export function generateRoadmap(missingSkills) {
