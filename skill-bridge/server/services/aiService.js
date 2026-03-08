@@ -78,6 +78,21 @@ Return JSON:
   return { ...parsed, targetSkills: job.required_skills }
 }
 
+export async function generateSummary(analysisData) {
+  const { matchPercentage = 0, matchedSkills = [], missingSkills = [], transferableSkills = [] } = analysisData
+  const topMissing = missingSkills.slice(0, 3).map(s => (typeof s === 'string' ? s : s.skill))
+  const topTransferable = transferableSkills.slice(0, 3).map(s => (typeof s === 'string' ? s : s.skill))
+
+  return callAI(`Write a brief 3-4 paragraph career development summary for a mentoring session.
+Include: current match percentage, top 3 transferable skills (if any), the 3 most critical missing skills ranked by job market frequency, and a recommended first step. Write in second person ('You have...', 'Your next step...'). Keep it under 200 words.
+
+Analysis data:
+- Match percentage: ${matchPercentage}%
+- Matched skills: ${matchedSkills.join(', ') || 'None'}
+- Top transferable skills: ${topTransferable.join(', ') || 'None identified'}
+- Top missing skills (by market demand): ${topMissing.join(', ') || 'None'}`)
+}
+
 export async function generateRoadmap(missingSkills, timeframe) {
   const content = await callAI(`You are a learning path advisor. Create a prioritized study roadmap for these missing skills.
 The user wants to be job-ready within ${timeframe}.

@@ -78,6 +78,38 @@ export function identifyTransferableSkills(userSkills, targetRoleCategory) {
   return { transferable, notRelevant }
 }
 
+export function getJobTitle(jobId) {
+  const job = jobs.find(j => j.id === jobId)
+  return job ? job.title : jobId
+}
+
+export function getJobCategory(jobId) {
+  const job = jobs.find(j => j.id === jobId)
+  return job ? job.category : null
+}
+
+export function getSkillFrequency(category) {
+  const categoryJobs = jobs.filter(j => j.category === category)
+  if (categoryJobs.length === 0) return []
+
+  const counts = new Map()
+  for (const job of categoryJobs) {
+    for (const skill of job.required_skills) {
+      counts.set(skill, (counts.get(skill) || 0) + 1)
+    }
+  }
+
+  const total = categoryJobs.length
+  return [...counts.entries()]
+    .map(([skill, count]) => ({
+      skill,
+      count,
+      total,
+      percentage: Math.round((count / total) * 100),
+    }))
+    .sort((a, b) => b.count - a.count)
+}
+
 export function generateRoadmap(missingSkills) {
   if (!missingSkills || missingSkills.length === 0) return []
 

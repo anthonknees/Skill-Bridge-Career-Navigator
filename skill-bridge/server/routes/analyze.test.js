@@ -89,6 +89,45 @@ describe('POST /api/analyze-resume', () => {
     expect(Array.isArray(res.body.missingSkills)).toBe(true)
     expect(Array.isArray(res.body.transferableSkills)).toBe(true)
     expect(typeof res.body.matchPercentage).toBe('number')
+    // Missing skills should be enriched with frequency data even in AI mode
+    res.body.missingSkills.forEach(item => {
+      expect(item).toHaveProperty('skill')
+      expect(item).toHaveProperty('frequency')
+      expect(item).toHaveProperty('totalJobs')
+    })
+  })
+
+  it('missing skills include frequency and totalJobs fields', async () => {
+    // aiService.extractSkills mocked to throw via beforeEach → fallback path
+    const res = await request(app)
+      .post('/api/analyze-resume')
+      .send({ resumeText: 'I know Python.', targetRole: 'jd-001' })
+
+    expect(res.status).toBe(200)
+    expect(Array.isArray(res.body.missingSkills)).toBe(true)
+    expect(res.body.missingSkills.length).toBeGreaterThan(0)
+    res.body.missingSkills.forEach(item => {
+      expect(item).toHaveProperty('skill')
+      expect(item).toHaveProperty('frequency')
+      expect(item).toHaveProperty('totalJobs')
+      expect(typeof item.skill).toBe('string')
+      expect(typeof item.frequency).toBe('number')
+      expect(typeof item.totalJobs).toBe('number')
+    })
+  })
+
+  it('missing skills are sorted by frequency descending', async () => {
+    // aiService.extractSkills mocked to throw via beforeEach → fallback path
+    // Send a resume with no matching skills so all target skills appear in missingSkills
+    const res = await request(app)
+      .post('/api/analyze-resume')
+      .send({ resumeText: 'I have experience with writing and public speaking.', targetRole: 'jd-001' })
+
+    expect(res.status).toBe(200)
+    const missing = res.body.missingSkills
+    expect(missing.length).toBeGreaterThan(1)
+    const frequencies = missing.map(s => s.frequency)
+    expect(frequencies).toEqual([...frequencies].sort((a, b) => b - a))
   })
 
   it('returns transferableSkills in fallback mode', async () => {

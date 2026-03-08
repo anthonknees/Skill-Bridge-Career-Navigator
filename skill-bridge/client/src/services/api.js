@@ -35,3 +35,12 @@ export function getJobs(category = '', search = '') {
 export function getSamples() {
   return request(`${API_BASE}/samples`)
 }
+
+export function exportSummary(analysisData, useAI = true) {
+  const url = useAI ? `${API_BASE}/export-summary` : `${API_BASE}/export-summary?forceMode=fallback`
+  return request(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(analysisData),
+  })
+}

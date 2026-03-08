@@ -29,6 +29,30 @@ function ModeBadge({ mode }) {
   )
 }
 
+function FrequencyBar({ frequency, totalJobs }) {
+  if (frequency == null) return null
+  const color =
+    frequency >= 70 ? 'bg-red-400' :
+    frequency >= 40 ? 'bg-amber-400' :
+    'bg-slate-300'
+  const textColor =
+    frequency >= 70 ? 'text-red-600' :
+    frequency >= 40 ? 'text-amber-600' :
+    'text-slate-500'
+  return (
+    <div className="w-full mt-1 pl-1">
+      <div className="flex items-center gap-2">
+        <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+          <div className={`${color} h-full rounded-full transition-all duration-500`} style={{ width: `${frequency}%` }} />
+        </div>
+        <span className={`text-xs font-medium ${textColor} whitespace-nowrap`}>
+          {frequency}% of postings
+        </span>
+      </div>
+    </div>
+  )
+}
+
 function ImportanceBadge({ importance }) {
   if (!importance) return null
   const styles = {
@@ -145,19 +169,27 @@ export default function GapAnalysis({ data }) {
           {missing.length === 0 ? (
             <p className="text-sm text-slate-400 italic">No missing skills — great match!</p>
           ) : (
-            <div className="flex flex-col gap-2">
-              {missing.map(({ skill, importance, reason }) => (
-                <div key={skill} className="flex flex-wrap items-start gap-2">
-                  <span className="text-xs font-medium bg-red-50 text-red-700 border border-red-200 px-2.5 py-1 rounded-full">
-                    {skill}
-                  </span>
-                  <ImportanceBadge importance={importance} />
-                  {reason && (
-                    <p className="w-full text-xs text-slate-500 mt-0.5 pl-1">{reason}</p>
-                  )}
-                </div>
-              ))}
-            </div>
+            <>
+              <div className="flex flex-col gap-3">
+                {missing.map(({ skill, importance, reason, frequency, totalJobs }) => (
+                  <div key={skill} className="flex flex-wrap items-start gap-2">
+                    <span className="text-xs font-medium bg-red-50 text-red-700 border border-red-200 px-2.5 py-1 rounded-full">
+                      {skill}
+                    </span>
+                    <ImportanceBadge importance={importance} />
+                    {reason && (
+                      <p className="w-full text-xs text-slate-500 mt-0.5 pl-1">{reason}</p>
+                    )}
+                    <FrequencyBar frequency={frequency} totalJobs={totalJobs} />
+                  </div>
+                ))}
+              </div>
+              {missing[0]?.totalJobs != null && (
+                <p className="mt-3 text-xs text-slate-400 border-t border-slate-100 pt-2">
+                  Based on {missing[0].totalJobs} job descriptions for this role category
+                </p>
+              )}
+            </>
           )}
         </div>
       </div>

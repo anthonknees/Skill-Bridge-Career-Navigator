@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { extractSkills, analyzeGap, generateRoadmap, identifyTransferableSkills } from './fallbackService.js'
+import { extractSkills, analyzeGap, generateRoadmap, identifyTransferableSkills, getSkillFrequency } from './fallbackService.js'
 
 describe('fallbackService.extractSkills', () => {
   it('returns known skills found in resume text', () => {
@@ -113,5 +113,36 @@ describe('fallbackService.identifyTransferableSkills', () => {
     const result = identifyTransferableSkills(userSkills, 'Cloud')
     expect(result.transferable).toEqual([])
     expect(result.notRelevant.length).toBeGreaterThan(0)
+  })
+})
+
+describe('fallbackService.getSkillFrequency', () => {
+  it('returns skills sorted by count descending for a valid category', () => {
+    const result = getSkillFrequency('Cloud')
+    expect(Array.isArray(result)).toBe(true)
+    expect(result.length).toBeGreaterThan(0)
+    result.forEach(entry => {
+      expect(entry).toHaveProperty('skill')
+      expect(entry).toHaveProperty('count')
+      expect(entry).toHaveProperty('total')
+      expect(entry).toHaveProperty('percentage')
+      expect(typeof entry.skill).toBe('string')
+      expect(typeof entry.count).toBe('number')
+      expect(typeof entry.total).toBe('number')
+      expect(typeof entry.percentage).toBe('number')
+    })
+    // Sorted descending by count
+    const counts = result.map(e => e.count)
+    expect(counts).toEqual([...counts].sort((a, b) => b - a))
+    // Skills appearing in all Cloud JDs should rank near the top
+    const skillNames = result.map(e => e.skill)
+    expect(skillNames).toContain('Docker')
+    expect(skillNames).toContain('Kubernetes')
+  })
+
+  it('returns empty array for an invalid or unknown category', () => {
+    const result = getSkillFrequency('InvalidCategory')
+    expect(Array.isArray(result)).toBe(true)
+    expect(result.length).toBe(0)
   })
 })
