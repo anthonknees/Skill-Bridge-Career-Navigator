@@ -170,6 +170,7 @@ export function generateRoadmap(missingSkills, frequencyData) {
         priority: entry ? entry.priority : 3,
         importance: frequency != null ? frequencyToImportance(frequency) : 'medium',
         courses: entry ? entry.courses : [],
+        certifications: entry ? (entry.certifications || []) : [],
       }
     })
     .sort((a, b) => a.priority - b.priority)

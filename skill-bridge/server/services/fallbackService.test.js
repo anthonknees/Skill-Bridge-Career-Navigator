@@ -75,12 +75,43 @@ describe('fallbackService.generateRoadmap', () => {
       expect(entry).toHaveProperty('priority')
       expect(entry).toHaveProperty('importance')
       expect(entry).toHaveProperty('courses')
+      expect(entry).toHaveProperty('certifications')
       expect(Array.isArray(entry.courses)).toBe(true)
+      expect(Array.isArray(entry.certifications)).toBe(true)
       expect(entry.courses.length).toBeGreaterThan(0)
     })
     // Lower priority number = higher priority, so AWS/Docker (priority 1) should come before Kubernetes (priority 2)
     const priorities = result.map(e => e.priority)
     expect(priorities).toEqual([...priorities].sort((a, b) => a - b))
+  })
+
+  it('includes at least 1 certification for AWS', () => {
+    const result = generateRoadmap(['AWS'])
+    expect(result.length).toBe(1)
+    expect(result[0].certifications.length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('returns empty certifications array for a skill with no known certifications', () => {
+    const result = generateRoadmap(['Git'])
+    expect(result.length).toBe(1)
+    expect(Array.isArray(result[0].certifications)).toBe(true)
+    expect(result[0].certifications.length).toBe(0)
+  })
+
+  it('each certification has required fields (name, issuer, level, url)', () => {
+    const result = generateRoadmap(['AWS', 'Kubernetes', 'Terraform'])
+    result.forEach(entry => {
+      entry.certifications.forEach(cert => {
+        expect(cert).toHaveProperty('name')
+        expect(cert).toHaveProperty('issuer')
+        expect(cert).toHaveProperty('level')
+        expect(cert).toHaveProperty('url')
+        expect(typeof cert.name).toBe('string')
+        expect(typeof cert.issuer).toBe('string')
+        expect(typeof cert.level).toBe('string')
+        expect(typeof cert.url).toBe('string')
+      })
+    })
   })
 
   it('returns empty array when missingSkills is empty', () => {

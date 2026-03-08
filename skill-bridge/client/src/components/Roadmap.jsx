@@ -164,6 +164,42 @@ export default function Roadmap({ data }) {
                   ))}
                 </div>
               )}
+
+              {/* Certifications */}
+              {item.certifications && item.certifications.length > 0 && (
+                <div className="mt-4 ml-10 space-y-2">
+                  <p className="text-xs font-semibold text-amber-600 uppercase tracking-wide flex items-center gap-1">
+                    <span>🏆</span> Recommended Certifications
+                  </p>
+                  {item.certifications.map((cert, cIdx) => (
+                    <div key={cIdx} className="flex items-start justify-between gap-3 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+                      <div className="min-w-0">
+                        <a
+                          href={cert.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-sm font-medium text-amber-800 hover:underline"
+                        >
+                          {cert.name}
+                        </a>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                          {cert.issuer}
+                          {cert.estimatedPrepHours ? ` · ~${cert.estimatedPrepHours}h prep` : ''}
+                        </p>
+                      </div>
+                      {cert.level && (
+                        <span className={`flex-shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full ${
+                          cert.level === 'beginner' ? 'bg-green-100 text-green-700' :
+                          cert.level === 'intermediate' ? 'bg-blue-100 text-blue-700' :
+                          'bg-purple-100 text-purple-700'
+                        }`}>
+                          {cert.level}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )
         })}

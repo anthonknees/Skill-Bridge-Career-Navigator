@@ -136,11 +136,13 @@ Missing skills: ${JSON.stringify(missingSkills)}${freqSection}
 
 For each skill, suggest 1-2 specific learning resources (real or plausible course names).
 Order by priority (foundational skills first, specialized skills later).
+If well-known industry certifications exist for a skill, include them in your recommendation. Only suggest real, verifiable certifications.
 
 IMPORTANT: Respond with ONLY a raw JSON array. No explanation, no markdown, no prose before or after.
 
 [{ "skill": "...", "priority": 1, "importance": "high|medium|low", "reason": "...", "estimatedWeeks": 2,
-   "courses": [{ "title": "...", "provider": "...", "hours": 10, "free": true }] }]`)
+   "courses": [{ "title": "...", "provider": "...", "hours": 10, "free": true }],
+   "certifications": [{ "name": "...", "issuer": "...", "level": "beginner|intermediate|advanced", "url": "...", "estimatedPrepHours": 40 }] }]`)
 
   const parsed = parseJSON(content)
   if (Array.isArray(parsed)) return parsed
