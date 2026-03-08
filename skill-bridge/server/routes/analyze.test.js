@@ -130,6 +130,53 @@ describe('POST /api/analyze-resume', () => {
     expect(frequencies).toEqual([...frequencies].sort((a, b) => b - a))
   })
 
+  it('returns 400 when neither targetRole nor customJobSkills is provided', async () => {
+    const res = await request(app)
+      .post('/api/analyze-resume')
+      .send({ resumeText: 'I know Python and Docker.' })
+
+    expect(res.status).toBe(400)
+    expect(res.body).toHaveProperty('error')
+  })
+
+  it('compares against customJobSkills when provided', async () => {
+    // AI throws via beforeEach → fallback path
+    const res = await request(app)
+      .post('/api/analyze-resume')
+      .send({
+        resumeText: 'I have experience with Python and Docker.',
+        customJobSkills: ['Python', 'Docker', 'Kubernetes', 'AWS'],
+      })
+
+    expect(res.status).toBe(200)
+    expect(res.body).toHaveProperty('targetSkills')
+    expect(res.body.targetSkills).toEqual(expect.arrayContaining(['Python', 'Docker', 'Kubernetes', 'AWS']))
+    expect(res.body.matchedSkills).toContain('Python')
+    expect(res.body.matchedSkills).toContain('Docker')
+    expect(res.body.missingSkills.map(s => (typeof s === 'string' ? s : s.skill))).toContain('Kubernetes')
+    expect(res.body.missingSkills.map(s => (typeof s === 'string' ? s : s.skill))).toContain('AWS')
+    expect(res.body.matchPercentage).toBe(50)
+    expect(['ai', 'fallback']).toContain(res.body.mode)
+  })
+
+  it('returns null frequency for missing skills when using customJobSkills', async () => {
+    // AI throws via beforeEach → fallback path
+    const res = await request(app)
+      .post('/api/analyze-resume')
+      .send({
+        resumeText: 'I have experience with Python.',
+        customJobSkills: ['Python', 'Docker', 'Kubernetes'],
+      })
+
+    expect(res.status).toBe(200)
+    expect(res.body.missingSkills.length).toBeGreaterThan(0)
+    res.body.missingSkills.forEach(item => {
+      expect(item).toHaveProperty('skill')
+      expect(item.frequency).toBeNull()
+      expect(item.totalJobs).toBeNull()
+    })
+  })
+
   it('returns transferableSkills in fallback mode', async () => {
     // aiService.extractSkills already mocked to throw via beforeEach
     // Resume with soft skills that transfer to the Cloud category

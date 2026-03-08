@@ -6,6 +6,7 @@ import roadmapRouter from './routes/roadmap.js'
 import samplesRouter from './routes/samples.js'
 import skillsRouter from './routes/skills.js'
 import exportSummaryRouter from './routes/exportSummary.js'
+import parseJobListingRouter from './routes/parseJobListing.js'
 import { generalLimiter, aiLimiter } from './middleware/rateLimiter.js'
 import { sanitizeResumeInput } from './middleware/validation.js'
 
@@ -25,6 +26,7 @@ app.use('/api/analyze-resume', aiLimiter, sanitizeResumeInput, analyzeRouter)
 app.use('/api/generate-roadmap', aiLimiter, roadmapRouter)
 app.use('/api/skills', skillsRouter)
 app.use('/api/export-summary', aiLimiter, exportSummaryRouter)
+app.use('/api/parse-job-listing', aiLimiter, parseJobListingRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)

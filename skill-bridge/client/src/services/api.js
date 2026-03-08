@@ -7,12 +7,24 @@ async function request(url, options = {}) {
   return data
 }
 
-export function analyzeResume(resumeText, targetRole, useAI = true) {
+export function analyzeResume(resumeText, targetRole, useAI = true, customJobSkills = null) {
   const url = useAI ? `${API_BASE}/analyze-resume` : `${API_BASE}/analyze-resume?forceMode=fallback`
+  const body = { resumeText }
+  if (customJobSkills) body.customJobSkills = customJobSkills
+  else body.targetRole = targetRole
   return request(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ resumeText, targetRole }),
+    body: JSON.stringify(body),
+  })
+}
+
+export function parseJobListing(jobText, useAI = true) {
+  const url = useAI ? `${API_BASE}/parse-job-listing` : `${API_BASE}/parse-job-listing?forceMode=fallback`
+  return request(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ jobText }),
   })
 }
 

@@ -43,18 +43,26 @@ export function extractSkills(resumeText) {
   return [...found]
 }
 
-export function analyzeGap(candidateSkills, jobId) {
-  const job = jobs.find(j => j.id === jobId)
-  if (!job) throw new Error(`Job not found: ${jobId}`)
+export function analyzeGap(candidateSkills, jobId, customJobSkills) {
+  let targetSkills, jobCategory
 
-  const targetSkills = job.required_skills
+  if (customJobSkills) {
+    targetSkills = customJobSkills
+    jobCategory = null
+  } else {
+    const job = jobs.find(j => j.id === jobId)
+    if (!job) throw new Error(`Job not found: ${jobId}`)
+    targetSkills = job.required_skills
+    jobCategory = job.category
+  }
+
   const candidateSet = new Set(candidateSkills.map(s => s.toLowerCase()))
 
   const matchedSkills = targetSkills.filter(s => candidateSet.has(s.toLowerCase()))
   const missingSkills = targetSkills.filter(s => !candidateSet.has(s.toLowerCase()))
-  const matchPercentage = Math.round((matchedSkills.length / targetSkills.length) * 100)
+  const matchPercentage = targetSkills.length === 0 ? 0 : Math.round((matchedSkills.length / targetSkills.length) * 100)
 
-  return { targetSkills, matchedSkills, missingSkills, matchPercentage, jobCategory: job.category }
+  return { targetSkills, matchedSkills, missingSkills, matchPercentage, jobCategory }
 }
 
 export function identifyTransferableSkills(userSkills, targetRoleCategory) {
@@ -76,6 +84,35 @@ export function identifyTransferableSkills(userSkills, targetRoleCategory) {
   }
 
   return { transferable, notRelevant }
+}
+
+export function parseJobListing(jobText) {
+  // Extract title: first non-empty line
+  const firstLine = jobText.split('\n').map(l => l.trim()).find(l => l.length > 0)
+  const title = firstLine || 'Custom Job Listing'
+
+  // Reuse extractSkills keyword matching against the job text
+  const extractedSkills = extractSkills(jobText)
+
+  // Infer category: whichever taxonomy category has the most matched skills
+  const categoryCounts = new Map()
+  for (const skill of extractedSkills) {
+    const entry = taxonomy[skill]
+    if (entry?.category) {
+      categoryCounts.set(entry.category, (categoryCounts.get(entry.category) || 0) + 1)
+    }
+  }
+
+  let category = 'General'
+  let maxCount = 0
+  for (const [cat, count] of categoryCounts) {
+    if (count > maxCount) {
+      maxCount = count
+      category = cat
+    }
+  }
+
+  return { title, extractedSkills, category }
 }
 
 export function getJobTitle(jobId) {

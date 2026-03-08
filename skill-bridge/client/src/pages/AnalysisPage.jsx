@@ -77,7 +77,7 @@ export default function AnalysisPage({ useAI }) {
       </Link>
 
       {/* Analysis component */}
-      <GapAnalysis data={analysis} />
+      <GapAnalysis data={analysis} customJobTitle={state.customJobTitle} />
 
       {/* Export Summary */}
       <div className="flex items-center justify-between bg-white border border-slate-200 rounded-xl px-5 py-4 shadow-sm">

@@ -53,15 +53,24 @@ Output format: ["skill1", "skill2", ...]`)
   return []
 }
 
-export async function analyzeGap(extractedSkills, jobId) {
-  const job = jobs.find(j => j.id === jobId)
-  if (!job) throw new Error(`Job not found: ${jobId}`)
+export async function analyzeGap(extractedSkills, jobId, customJobSkills) {
+  let targetSkills, roleLabel
+
+  if (customJobSkills) {
+    targetSkills = customJobSkills
+    roleLabel = 'Custom Role'
+  } else {
+    const job = jobs.find(j => j.id === jobId)
+    if (!job) throw new Error(`Job not found: ${jobId}`)
+    targetSkills = job.required_skills
+    roleLabel = job.title
+  }
 
   const content = await callAI(`You are a career advisor AI. Compare the candidate's skills against the target role requirements.
 
 Candidate skills: ${JSON.stringify(extractedSkills)}
-Target role: ${job.title}
-Required skills for this role: ${JSON.stringify(job.required_skills)}
+Target role: ${roleLabel}
+Required skills for this role: ${JSON.stringify(targetSkills)}
 
 For each missing skill, briefly explain why it matters for this role (1 sentence).
 Additionally, identify which of the candidate's existing skills are transferable to the target role's industry, even if they aren't listed as required skills. For each transferable skill, briefly explain how it applies to the new field.
@@ -75,7 +84,7 @@ Return JSON:
 }`)
 
   const parsed = parseJSON(content)
-  return { ...parsed, targetSkills: job.required_skills }
+  return { ...parsed, targetSkills }
 }
 
 export async function generateSummary(analysisData) {
@@ -91,6 +100,28 @@ Analysis data:
 - Matched skills: ${matchedSkills.join(', ') || 'None'}
 - Top transferable skills: ${topTransferable.join(', ') || 'None identified'}
 - Top missing skills (by market demand): ${topMissing.join(', ') || 'None'}`)
+}
+
+export async function parseJobListing(jobText) {
+  const content = await callAI(`You are a job description parser. Extract the following from this job posting:
+1. The job title
+2. All required technical skills (programming languages, tools, frameworks, platforms)
+3. The best-fit category from: Frontend, Backend, Cloud, Data, DevOps, Full Stack
+
+Return ONLY valid JSON:
+{ "title": "...", "extractedSkills": [...], "category": "..." }
+
+Job posting:
+---
+${jobText}
+---`)
+
+  const parsed = parseJSON(content)
+  return {
+    title: parsed.title || 'Custom Job Listing',
+    extractedSkills: Array.isArray(parsed.extractedSkills) ? parsed.extractedSkills : [],
+    category: parsed.category || 'General',
+  }
 }
 
 export async function generateRoadmap(missingSkills, timeframe, frequencyData) {

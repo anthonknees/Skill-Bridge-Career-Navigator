@@ -67,7 +67,7 @@ function ImportanceBadge({ importance }) {
   )
 }
 
-export default function GapAnalysis({ data }) {
+export default function GapAnalysis({ data, customJobTitle }) {
   const { extractedSkills = [], targetSkills = [], matchedSkills = [], missingSkills = [], transferableSkills = [], matchPercentage = 0, mode } = data
   const missing = normalizeMissing(missingSkills)
   const transferable = normalizeTransferable(transferableSkills)
@@ -94,7 +94,14 @@ export default function GapAnalysis({ data }) {
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
         <div className="flex items-end gap-3 mb-3">
           <span className={`text-5xl font-bold ${matchColor}`}>{matchPercentage}%</span>
-          <span className="text-slate-500 text-sm pb-2">skill match with target role</span>
+          <span className="text-slate-500 text-sm pb-2">
+            skill match with{' '}
+            {customJobTitle ? (
+              <span className="font-medium text-slate-600">{customJobTitle}</span>
+            ) : (
+              'target role'
+            )}
+          </span>
         </div>
         {/* Stacked progress bar */}
         <div className="flex rounded-full overflow-hidden h-3 bg-slate-100 mb-2">
