@@ -16,12 +16,12 @@ export function analyzeResume(resumeText, targetRole, useAI = true) {
   })
 }
 
-export function generateRoadmap(missingSkills, timeframe = '3 months', useAI = true) {
+export function generateRoadmap(missingSkills, timeframe = '3 months', useAI = true, frequencyData = null) {
   const url = useAI ? `${API_BASE}/generate-roadmap` : `${API_BASE}/generate-roadmap?forceMode=fallback`
   return request(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ missingSkills, timeframe }),
+    body: JSON.stringify({ missingSkills, timeframe, ...(frequencyData ? { frequencyData } : {}) }),
   })
 }
 

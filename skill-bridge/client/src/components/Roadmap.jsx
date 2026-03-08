@@ -8,6 +8,24 @@ const STATUS_STYLES = {
   completed: 'bg-green-100 text-green-700 border-green-200',
 }
 
+const IMPORTANCE_STYLES = {
+  high: 'bg-rose-100 text-rose-700',
+  medium: 'bg-amber-100 text-amber-700',
+  low: 'bg-slate-100 text-slate-500',
+}
+const IMPORTANCE_LABELS = { high: 'High Demand', medium: 'Medium Demand', low: 'Low Demand' }
+
+function ImportanceBadge({ importance }) {
+  if (!importance) return null
+  const styles = IMPORTANCE_STYLES[importance] || IMPORTANCE_STYLES.low
+  const label = IMPORTANCE_LABELS[importance] || importance
+  return (
+    <span className={`inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded-full ${styles}`}>
+      {label}
+    </span>
+  )
+}
+
 function ModeBadge({ mode }) {
   if (mode === 'ai') {
     return (
@@ -95,9 +113,12 @@ export default function Roadmap({ data }) {
                     {item.priority || idx + 1}
                   </span>
                   <div className="min-w-0">
-                    <h3 className={`font-semibold text-slate-800 ${isCompleted ? 'line-through text-slate-400' : ''}`}>
-                      {item.skill}
-                    </h3>
+                    <div className="flex items-center flex-wrap gap-2">
+                      <h3 className={`font-semibold text-slate-800 ${isCompleted ? 'line-through text-slate-400' : ''}`}>
+                        {item.skill}
+                      </h3>
+                      <ImportanceBadge importance={item.importance} />
+                    </div>
                     {item.estimatedWeeks && (
                       <span className="text-xs text-slate-400">{item.estimatedWeeks} week{item.estimatedWeeks !== 1 ? 's' : ''} estimated</span>
                     )}

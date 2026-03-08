@@ -57,7 +57,10 @@ export default function AnalysisPage({ useAI }) {
     setLoading(true)
     setError('')
     try {
-      const result = await generateRoadmap(missingSkillNames, '3 months', useAI)
+      const frequencyData = (analysis.missingSkills || [])
+        .filter(s => typeof s === 'object' && s.frequency != null)
+        .map(s => ({ skill: s.skill, frequency: s.frequency }))
+      const result = await generateRoadmap(missingSkillNames, '3 months', useAI, frequencyData.length > 0 ? frequencyData : null)
       navigate('/roadmap', { state: { roadmap: result, analysis } })
     } catch (err) {
       setError(err.message || 'Failed to generate roadmap. Please try again.')
