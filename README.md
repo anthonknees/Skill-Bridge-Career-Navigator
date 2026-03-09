@@ -1,107 +1,108 @@
 # Skill-Bridge Career Navigator
 
-## Overview
-
-Skill-Bridge is a career navigation platform where you paste your resume, pick a target job role, and instantly see which skills you have, which you're missing, and a prioritized learning roadmap to close the gap. The analysis is powered by OpenAI GPT-4o-mini with a full rule-based fallback so the app works even without an API key.
+## Candidate Information
+- **Candidate Name:** Anthony Tran
+- **Scenario Chosen:** Skill-Bridge Career Navigator
+- **Estimated Time Spent:** 6 Hours measured with 45 minute blocks of pomodoro flows
 
 ## Video Demo
 [Watch the demo](https://youtube.com) — *Link will be updated once uploaded*
 
-## Tech Stack
-
-- **Frontend:** React 19, Vite, Tailwind CSS, React Router v6
-- **Backend:** Node.js, Express 5
-- **AI:** OpenAI API (GPT-4o-mini)
-- **Testing:** Vitest + Supertest (36 tests, TDD methodology)
-
-## Getting Started
+## Quick Start
 
 ### Prerequisites
-
 - Node.js >= 18
-- An OpenAI API key (optional — fallback mode works without one)
+- OpenAI API key (get one at https://platform.openai.com)
 
-### Installation
-
+### Run Commands
 ```bash
-# 1. Clone the repo
-git clone <repo-url>
-cd skill-bridge
+# Clone the repo
+git clone https://github.com/YOUR_USERNAME/skill-bridge-career-navigator.git
+cd skill-bridge-career-navigator
 
-# 2. Install all dependencies
-npm run install:all
+# Install dependencies
+npm install
+cd client && npm install
+cd ../server && npm install
+cd ..
 
-# 3. Configure environment
+# Set up environment
 cp server/.env.example server/.env
-# Edit server/.env and add your OPENAI_API_KEY (optional)
+# Open server/.env and add your OpenAI API key
 
-# 4. Start both servers
+# Start the app (from project root)
 npm run dev
 ```
 
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:3001
+The app runs on `http://localhost:5173` (frontend) and `http://localhost:3000` (backend).
 
-## User Flow
+No API key? No problem — the app runs in fallback mode automatically using rule-based keyword matching.
 
-1. **Home page** — Paste your resume text (or load one of 5 sample profiles from the dropdown), then pick a target job role from the selector.
-2. **Gap Analysis** — See your match percentage, which skills you already have (green), and which you're missing (red). In AI mode, missing skills include importance ratings and explanations.
-3. **Learning Roadmap** — Get a prioritized list of skills to learn with course recommendations. Click each card to toggle its status: Not Started → In Progress → Completed.
-
-## AI Integration
-
-**AI Mode:** OpenAI GPT-4o-mini extracts skills from your resume text, compares them against the job description's required skills, and generates a prioritized learning roadmap with reasoned recommendations.
-
-**Fallback Mode:** If the OpenAI API is unavailable, rate-limited, or returns an error, the app automatically falls back to a rule-based system — no error is shown to the user. The fallback uses tokenized keyword matching against `skills_taxonomy.json` (which maps aliases like "ReactJS" → "React") for skill extraction, direct set comparison for gap analysis, and static course lookups from `courses.json` for the roadmap.
-
-**Toggle:** The AI/Fallback toggle in the top-right header lets you force fallback mode for demo purposes. An amber banner appears when fallback is active. The response always includes a `mode` field (`"ai"` or `"fallback"`) displayed as a badge in the UI.
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/jobs` | List job descriptions; filter by `?category=` and `?search=` |
-| `POST` | `/api/analyze-resume` | Extract skills from resume and compare to target role |
-| `POST` | `/api/generate-roadmap` | Generate prioritized learning roadmap for missing skills |
-| `GET` | `/api/samples` | Return sample resume profiles for demo |
-| `GET` | `/api/health` | Health check |
-
-All AI routes accept `?forceMode=fallback` to bypass AI and use fallback directly.
-
-## Testing
-
+### Test Commands
 ```bash
-# Run all 36 tests
-cd server && npm test
-
-# Watch mode during development
-cd server && npm run test:watch
+cd server
+npm test
 ```
 
-### Test breakdown (36 tests across 6 files)
+## AI Disclosure
 
-| File | Tests | What it covers |
-|------|-------|----------------|
-| `data.test.js` | 13 | Synthetic JSON files have valid structure and required fields |
-| `services/fallbackService.test.js` | 8 | Skill extraction (including alias resolution), gap analysis (0%/100%/partial), roadmap generation |
-| `services/aiService.test.js` | 4 | OpenAI extractSkills/analyzeGap/generateRoadmap with mocked API calls; throws on failure |
-| `routes/jobs.test.js` | 3 | GET /api/jobs — all jobs, category filter, keyword search |
-| `routes/analyze.test.js` | 6 | Valid response shape, 400 on empty input, 400 on missing role, 413 on oversized input, fallback mode, AI mode |
-| `routes/roadmap.test.js` | 2 | Valid roadmap shape, empty missingSkills returns empty array |
+**Did you use an AI assistant?** Yes — Claude (Anthropic) via Claude Code and Claude.ai.
 
-## Security
+**How did you verify the suggestions?**
+I used test-driven development throughout the project. Every backend feature started with a failing test before implementation, so AI-generated code had to pass concrete test assertions to be accepted. I also manually tested each API endpoint with curl and verified the frontend flow in the browser after each phase. AI-generated code was reviewed for correctness before committing — I did not blindly accept outputs.
 
-- API keys are in `.env` (not committed) — see `.env.example`
-- All data is synthetic — no real PII anywhere
-- Input validation on all routes (400/413 on bad input)
-- Rate limiting: 50 req/min on all `/api/` routes, 10 req/min on AI routes (`express-rate-limit`)
-- Resume text capped at 10,000 characters (returns HTTP 413 if exceeded)
-- Input trimmed of whitespace before processing
+**Give one example of a suggestion you rejected or changed:**
+The AI initially structured the roadmap generation to make a separate OpenAI call for each missing skill individually. I rejected this because it would have multiplied API costs and latency by the number of missing skills (potentially 8–10 calls per analysis). Instead, I consolidated it into a single prompt that processes all missing skills at once and returns a complete roadmap in one API call.
 
-## Future Enhancements
+## Features
 
-- [ ] Real job board API integration (LinkedIn, Indeed)
-- [ ] User accounts and persistent progress tracking
-- [ ] PDF resume upload with text extraction
-- [ ] Mock interview question generation per skill gap
-- [ ] Skill trend data (which skills are growing in demand)
+### Core Features
+- **Resume Analysis:** Paste resume text or load a sample profile, and the AI extracts your technical skills
+- **Gap Analysis Dashboard:** Compare your skills against target role requirements with match percentage, matched skills, transferable skills, and missing skills sorted by job market demand
+- **Learning Roadmap:** Prioritized skill cards with course recommendations, certification suggestions, and importance levels (high/medium/low) based on job posting frequency
+- **AI + Fallback:** Every AI feature has a rule-based fallback that activates automatically if the API is unavailable — toggle between modes in the UI
+
+### Additional Features
+- **Custom Job Listing Import:** Paste any job posting and the AI extracts required skills for comparison
+- **Transferable Skills Detection:** Career switchers see which existing skills are valuable in their target field
+- **Skill Frequency Analysis:** See how often each missing skill appears across job postings for data-backed prioritization
+- **Certification Recommendations:** Real industry certifications (AWS, Docker, Kubernetes, Terraform, etc.) with issuer, level, and prep time
+- **Mentor Export:** Generate a shareable career development summary for mentoring sessions
+
+## Tech Stack
+- **Frontend:** React (Vite), Tailwind CSS
+- **Backend:** Node.js, Express
+- **AI:** OpenAI API (GPT-4o-mini)
+- **Testing:** Vitest (TDD methodology)
+- **Data:** Synthetic JSON files (no database)
+
+## AI Integration
+- **AI Mode:** OpenAI handles skill extraction, gap analysis, roadmap generation, job listing parsing, and export summaries
+- **Fallback Mode:** Keyword matching against a skills taxonomy, set comparison for gap analysis, static course lookup for roadmaps
+- **Toggle:** Use the switch in the UI to manually switch between AI and fallback modes
+
+## Design Documentation
+See [DOCUMENTATION.md](./DOCUMENTATION.md) for full architecture details, design decisions, and trade-offs.
+
+## Tradeoffs & Prioritization
+
+**What did you cut to stay within the time limit?**
+- No user accounts or authentication — sessions are not persisted
+- No resume file upload (PDF/DOCX) — text paste only for the MVP
+- No real job board API integration — all job data is synthetic
+- No end-to-end frontend tests — testing focused on backend services and API routes where the core logic lives
+
+**What would you build next if you had more time?**
+- Real job board integration (LinkedIn, Indeed APIs) to replace synthetic data
+- User accounts with progress tracking so users can mark skills as learned over time
+- Resume file upload with PDF and DOCX text extraction
+- Mock interview question generation based on the user's specific skill gaps
+- A collaborative mentor dashboard to track multiple mentees in one view
+
+**Known limitations:**
+- Gap analysis quality depends on the synthetic job descriptions dataset (15–25 postings) — a production version would need thousands of real postings for meaningful frequency data
+- AI responses can vary between calls — the same resume may produce slightly different skill extractions on consecutive runs
+- Certification data is static in courses.json and does not auto-update
+- No persistence — refreshing the page loses the current analysis
+- Rate limiting is configured for local development; production deployment would need stricter limits and authentication
+
