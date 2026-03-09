@@ -6,7 +6,7 @@
 - **Estimated Time Spent:** 6 Hours measured with 45 minute blocks of pomodoro flows
 
 ## Video Demo
-[Watch the demo](https://youtube.com) — *Link will be updated once uploaded*
+[Watch the demo](https://youtu.be/oJcQA9GNwSE?si=pvYLCia8VBaSjFOp)
 
 ## Quick Start
 
